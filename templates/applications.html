@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои заявки</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div class="wrapper">
+
+    <div class="sidebar">
+        <h2>LibraryBook</h2>
+
+        <a href="/books">Каталог книг</a>
+        <a href="/applications">Мои заявки</a>
+        <a href="/reviews">Отзывы</a>
+        <a href="/">Выход</a>
+    </div>
+
+    <div class="main">
+
+        <div class="header">
+            <h1>Мои заявки</h1>
+            <p>Список ваших заявок на бронирование книг</p>
+        </div>
+
+        <div class="card">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Книга</th>
+                        <th>Автор</th>
+                        <th>Статус</th>
+                        <th>Дата создания</th>
+                    </tr>
+                </thead>
+
+                <tbody id="applicationsTable"></tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const userId = localStorage.getItem('user_id');
+const roleId = localStorage.getItem('role_id');
+
+if(!userId){
+    window.location.href = "/";
+}
+
+if(roleId == 1){
+    window.location.href = "/admin";
+}
+
+function loadApplications(){
+
+    fetch(`/api/applications/my/${userId}`)
+
+    .then(response => response.json())
+
+    .then(applications => {
+
+        let table = document.getElementById('applicationsTable');
+
+        table.innerHTML = '';
+
+        applications.forEach(application => {
+
+            table.innerHTML += `
+                <tr>
+                    <td>${application.id}</td>
+                    <td>${application.title}</td>
+                    <td>${application.author}</td>
+                    <td>
+                        <span class="status">
+                            ${application.status}
+                        </span>
+                    </td>
+                    <td>
+                        ${new Date(application.created_at)
+                            .toLocaleString('ru-RU')}
+                    </td>
+                </tr>
+            `;
+
+        });
+
+    });
+
+}
+
+loadApplications();
+
+</script>
+
+</body>
+</html>

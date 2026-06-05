@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div class="auth-page">
+
+    <div class="auth-box">
+
+        <h1>Регистрация</h1>
+
+        <p>
+            Создание нового аккаунта
+        </p>
+
+        <input
+            type="text"
+            id="login"
+            placeholder="Логин">
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Пароль">
+
+        <input
+            type="text"
+            id="full_name"
+            placeholder="ФИО">
+
+        <input
+            type="text"
+            id="phone"
+            placeholder="Телефон">
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Email">
+
+        <button onclick="registerUser()">
+            Зарегистрироваться
+        </button>
+
+        <p style="margin-top:20px;">
+            Уже есть аккаунт?
+
+            <a href="/">
+                Войти
+            </a>
+        </p>
+
+        <div id="message"></div>
+
+    </div>
+
+</div>
+
+<script>
+
+function registerUser(){
+
+    fetch('/api/register', {
+
+        method:'POST',
+
+        headers:{
+            'Content-Type':'application/json'
+        },
+
+        body:JSON.stringify({
+
+            login:
+            document.getElementById('login').value,
+
+            password:
+            document.getElementById('password').value,
+
+            full_name:
+            document.getElementById('full_name').value,
+
+            phone:
+            document.getElementById('phone').value,
+
+            email:
+            document.getElementById('email').value
+
+        })
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        let msg =
+            document.getElementById('message');
+
+        if(data.message){
+
+            msg.className = "message";
+
+            msg.innerText = data.message;
+
+        }else{
+
+            msg.className = "error";
+
+            msg.innerText = data.error;
+
+        }
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

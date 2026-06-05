@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div class="auth-page">
+    <div class="auth-box">
+
+        <h1>LibraryBook</h1>
+        <p>Система бронирования книг</p>
+
+        <input
+            type="text"
+            id="login"
+            placeholder="Логин">
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Пароль">
+
+        <button onclick="loginUser()">
+            Войти
+        </button>
+
+        <p style="margin-top:20px;">
+            Нет аккаунта?
+            <a href="/register">
+                Зарегистрироваться
+            </a>
+        </p>
+
+        <div id="message"></div>
+
+    </div>
+</div>
+
+<script>
+
+function loginUser(){
+
+    fetch('/api/login',{
+
+        method:'POST',
+
+        headers:{
+            'Content-Type':'application/json'
+        },
+
+        body:JSON.stringify({
+
+            login:document.getElementById('login').value,
+
+            password:document.getElementById('password').value
+
+        })
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        if(data.user_id){
+
+            localStorage.setItem(
+                'user_id',
+                data.user_id
+            );
+
+            localStorage.setItem(
+                'role_id',
+                data.role_id
+            );
+
+            if(data.role_id == 1){
+
+                window.location.href = "/admin";
+
+            }else{
+
+                window.location.href = "/books";
+
+            }
+
+        }else{
+
+            document.getElementById(
+                'message'
+            ).className = 'error';
+
+            document.getElementById(
+                'message'
+            ).innerText = data.error;
+
+        }
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

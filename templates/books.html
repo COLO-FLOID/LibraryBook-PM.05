@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог книг</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div class="wrapper">
+
+    <div class="sidebar">
+        <h2>LibraryBook</h2>
+
+        <a href="/books">Каталог книг</a>
+        <a href="/applications">Мои заявки</a>
+        <a href="/reviews">Отзывы</a>
+        <a href="/">Выход</a>
+    </div>
+
+    <div class="main">
+
+        <div class="header">
+            <h1>Каталог книг</h1>
+            <p>Выберите книгу для бронирования</p>
+        </div>
+
+        <div class="card">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Автор</th>
+                        <th>ISBN</th>
+                        <th>В наличии</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+
+                <tbody id="booksTable"></tbody>
+            </table>
+
+            <div id="message"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const userId = localStorage.getItem('user_id');
+const roleId = localStorage.getItem('role_id');
+
+if(!userId){
+    window.location.href = "/";
+}
+
+if(roleId == 1){
+    window.location.href = "/admin";
+}
+
+function loadBooks(){
+
+    fetch('/api/books')
+
+    .then(response => response.json())
+
+    .then(books => {
+
+        let table = document.getElementById('booksTable');
+
+        table.innerHTML = '';
+
+        books.forEach(book => {
+
+            table.innerHTML += `
+                <tr>
+                    <td>${book.id}</td>
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td>${book.isbn}</td>
+                    <td>${book.in_stock}</td>
+                    <td>
+                        <button class="small-btn"
+                                onclick="reserveBook(${book.id})">
+                            Забронировать
+                        </button>
+                    </td>
+                </tr>
+            `;
+
+        });
+
+    });
+
+}
+
+function reserveBook(bookId){
+
+    fetch('/api/applications', {
+
+        method:'POST',
+
+        headers:{
+            'Content-Type':'application/json'
+        },
+
+        body:JSON.stringify({
+            user_id:userId,
+            book_id:bookId
+        })
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        let msg = document.getElementById('message');
+
+        if(data.message){
+
+            msg.className = 'message';
+
+            msg.innerText = data.message;
+
+        }else{
+
+            msg.className = 'error';
+
+            msg.innerText = data.error;
+
+        }
+
+        loadBooks();
+
+    });
+
+}
+
+loadBooks();
+
+</script>
+
+</body>
+</html>

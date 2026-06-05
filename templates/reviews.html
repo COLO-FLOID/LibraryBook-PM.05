@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отзывы</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div class="wrapper">
+
+    <div class="sidebar">
+
+        <h2>LibraryBook</h2>
+
+        <a href="/books">Каталог книг</a>
+        <a href="/applications">Мои заявки</a>
+        <a href="/reviews">Отзывы</a>
+        <a href="/">Выход</a>
+
+    </div>
+
+    <div class="main">
+
+        <div class="header">
+
+            <h1>Отзывы пользователей</h1>
+
+            <p>
+                Оставьте отзыв о работе библиотеки
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <textarea
+                id="review"
+                rows="5"
+                placeholder="Введите отзыв">
+            </textarea>
+
+            <button onclick="sendReview()">
+                Отправить отзыв
+            </button>
+
+            <div id="message"></div>
+
+        </div>
+
+        <div class="card">
+
+            <h2 style="margin-bottom:20px;">
+                Все отзывы
+            </h2>
+
+            <div id="reviewsContainer"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const userId = localStorage.getItem('user_id');
+
+function sendReview(){
+
+    fetch('/api/reviews', {
+
+        method:'POST',
+
+        headers:{
+            'Content-Type':'application/json'
+        },
+
+        body:JSON.stringify({
+
+            user_id:userId,
+
+            text:
+            document.getElementById(
+                'review'
+            ).value
+
+        })
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        let msg =
+            document.getElementById('message');
+
+        msg.className = "message";
+
+        msg.innerText = data.message;
+
+        document.getElementById(
+            'review'
+        ).value = '';
+
+        loadReviews();
+
+    });
+
+}
+
+function loadReviews(){
+
+    fetch('/api/reviews')
+
+    .then(response => response.json())
+
+    .then(reviews => {
+
+        let container =
+            document.getElementById(
+                'reviewsContainer'
+            );
+
+        container.innerHTML = '';
+
+        if(reviews.length === 0){
+            container.innerHTML = 'Отзывов пока нет';
+            return;
+        }
+
+        reviews.forEach(review => {
+
+            container.innerHTML += `
+                <div style="
+                    border:1px solid #ddd;
+                    border-radius:10px;
+                    padding:15px;
+                    margin-bottom:15px;
+                ">
+
+                    <strong>
+                        ${review.login}
+                    </strong>
+
+                    <br><br>
+
+                    ${review.text}
+
+                    <br><br>
+
+                    <small>
+                        ${review.created_at}
+                    </small>
+
+                </div>
+            `;
+
+        });
+
+    });
+
+}
+
+loadReviews();
+
+</script>
+
+</body>
+</html>

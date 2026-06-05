@@ -1,0 +1,177 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f3f4f6;
+    color:#111827;
+}
+
+.auth-page{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.auth-box{
+    width:420px;
+    background:white;
+    padding:35px;
+    border-radius:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.auth-box h1{
+    margin-bottom:10px;
+}
+
+.auth-box p{
+    margin-bottom:25px;
+    color:#6b7280;
+}
+
+input,
+select{
+    width:100%;
+    padding:14px;
+    margin-bottom:15px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    font-size:15px;
+}
+
+textarea{
+    width:100%;
+    min-height:120px;
+    padding:15px;
+    margin-bottom:15px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    font-size:15px;
+    font-family:inherit;
+    resize:vertical;
+}
+
+textarea:focus {
+    border-color: #4f7cff;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+a{
+    color:#2563eb;
+    text-decoration:none;
+}
+
+.wrapper{
+    display:flex;
+    min-height:100vh;
+}
+
+.sidebar{
+    width:250px;
+    background:#111827;
+    color:white;
+    padding:25px;
+}
+
+.sidebar h2{
+    margin-bottom:35px;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    padding:13px;
+    margin-bottom:10px;
+    border-radius:10px;
+}
+
+.sidebar a:hover{
+    background:#1f2937;
+}
+
+.main{
+    flex:1;
+    padding:30px;
+}
+
+.header{
+    background:white;
+    padding:22px;
+    border-radius:18px;
+    margin-bottom:25px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom:25px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+}
+
+th,
+td{
+    padding:16px;
+    border-bottom:1px solid #e5e7eb;
+    text-align:left;
+}
+
+th{
+    background:#eff6ff;
+}
+
+.status{
+    display:inline-block;
+    padding:7px 12px;
+    border-radius:10px;
+    background:#dbeafe;
+    color:#1d4ed8;
+    font-weight:600;
+    font-size:14px;
+}
+
+.message{
+    margin-top:15px;
+    color:#16a34a;
+    font-weight:600;
+}
+
+.error{
+    margin-top:15px;
+    color:#dc2626;
+    font-weight:600;
+}
+
+.small-btn{
+    padding:9px 12px;
+    font-size:14px;
+}
